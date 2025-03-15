@@ -15,7 +15,7 @@ export const MovieItem = ({ movie, onClick, index }) => {
 
   return (
     <motion.div
-      className="relative group cursor-pointer overflow-hidden rounded-xl"
+      className="relative group cursor-pointer overflow-hidden "
       variants={item}
       whileHover={{
         scale: 1.05,
@@ -23,7 +23,7 @@ export const MovieItem = ({ movie, onClick, index }) => {
       }}
       onClick={onClick}
     >
-      <div className="aspect-[2/3] overflow-hidden">
+      <div className="aspect-[2/3] overflow-hidden rounded-xl">
         {movie.Poster && movie.Poster !== "N/A" ? (
           <img
             src={movie.Poster}
@@ -37,11 +37,11 @@ export const MovieItem = ({ movie, onClick, index }) => {
         )}
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent">
-        <h2 className="text-lg font-semibold text-white truncate">
+      <div className="  p-1 ">
+        <h2 className="text-lg font-semibold text-white truncate leading-none">
           {movie.Title}
         </h2>
-        <div className="flex items-center mt-1">
+        <div className="flex items-center ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-4 w-4 text-yellow-400"
@@ -57,7 +57,7 @@ export const MovieItem = ({ movie, onClick, index }) => {
       </div>
 
       <div className="absolute top-2 right-2">
-        <span className="px-2 py-1 text-xs font-bold bg-gradient-to-r from-blue-500 to-purple-500 rounded-full text-white">
+        <span className="px-2 py-1 text-xs font-bold bg-[#101828] rounded-full text-white">
           {movie.Type}
         </span>
       </div>

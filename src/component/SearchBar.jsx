@@ -9,7 +9,7 @@ export const SearchBar = ({ query, setQuery, searchMovies }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for movies..."
-          className="w-full p-4 pr-12 rounded-full bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-30 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+          className="w-full p-4 pr-12 rounded-3xl bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-30 text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
         />
         <button
           type="submit"

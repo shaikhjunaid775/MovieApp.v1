@@ -8,6 +8,7 @@ export const FilterDropdown = ({ filterType, setFilterType }) => {
         onChange={(e) => setFilterType(e.target.value)}
         className="block appearance-none w-full bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-30 text-black p-4 pr-8 rounded-full leading-tight focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
       >
+        <option value="all">All</option>
         <option value="popular">Popular</option>
         <option value="latest">Latest</option>
         <option value="top_rated">Top Rated</option>

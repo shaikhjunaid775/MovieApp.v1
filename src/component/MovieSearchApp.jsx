@@ -6,16 +6,21 @@ import { MovieList } from "./MovieList";
 import { MovieDetails } from "./MovieDetails";
 import { ErrorMessage } from "./Error";
 import { Loader } from "./Loader";
+import { TopRated } from "./TopRated";
+import Banner from "./Banner";
+import Header from "./Header";
+import MovieCategories from "./MovieCategories";
 
 // Main App Component
 const MovieSearchApp = () => {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
+  const [allMovies, setAllMovies] = useState({}); // Store movies from different categories
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [filterType, setFilterType] = useState("popular");
+  const [filterType, setFilterType] = useState("all"); // Set default to "all"
 
   // Replace with your own API key
   const OMDB_API_KEY = "6c6150e3";
@@ -23,6 +28,7 @@ const MovieSearchApp = () => {
 
   // Default search terms for different filter types
   const filterSearchTerms = {
+    all: null, // No specific search term for "all"
     popular: "marvel",
     latest: "movie 2024",
     top_rated: "star wars",
@@ -30,8 +36,60 @@ const MovieSearchApp = () => {
 
   // Load movies on initial render and when filter changes
   useEffect(() => {
-    fetchMoviesByFilter(filterType);
+    if (filterType === "all") {
+      fetchAllCategories();
+    } else {
+      fetchMoviesByFilter(filterType);
+    }
   }, [filterType]);
+
+  // Fetch movies for all categories
+  const fetchAllCategories = async () => {
+    setLoading(true);
+    setError(null);
+    
+    const categories = ["all","popular", "latest", "top_rated"];
+    const categoryMovies = {};
+    
+    try {
+      // Fetch movies for each category in parallel
+      await Promise.all(
+        categories.map(async (category) => {
+          const searchTerm = filterSearchTerms[category];
+          const response = await fetch(
+            `${OMDB_BASE_URL}/?s=${encodeURIComponent(
+              searchTerm
+            )}&type=movie&apikey=${OMDB_API_KEY}`
+          );
+          const data = await response.json();
+          
+          if (data.Response === "True" && data.Search) {
+            let sortedResults = [...data.Search];
+            
+            if (category === "latest") {
+              sortedResults.sort((a, b) => parseInt(b.Year) - parseInt(a.Year));
+            } else if (category === "top_rated") {
+              sortedResults = sortedResults.slice(0, 10);
+            }
+            
+            categoryMovies[category] = sortedResults;
+          }
+        })
+      );
+      
+      setAllMovies(categoryMovies);
+      
+      // Set movies to a combined array for the banner display
+      const combinedMovies = Object.values(categoryMovies).flat();
+      // Take a subset to avoid too many movies in the banner
+      setMovies(combinedMovies.slice(0, 10));
+      
+    } catch (err) {
+      setError("Failed to fetch movies. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchMoviesByFilter = async (filterType) => {
     setLoading(true);
@@ -63,6 +121,8 @@ const MovieSearchApp = () => {
         }
 
         setMovies(sortedResults);
+        // Update the category in allMovies
+        setAllMovies(prev => ({...prev, [filterType]: sortedResults}));
       } else {
         setError(data.Error || "Failed to fetch movies");
         setMovies([]);
@@ -79,7 +139,11 @@ const MovieSearchApp = () => {
     e.preventDefault();
 
     if (query.trim() === "") {
-      fetchMoviesByFilter(filterType);
+      if (filterType === "all") {
+        fetchAllCategories();
+      } else {
+        fetchMoviesByFilter(filterType);
+      }
       return;
     }
 
@@ -96,6 +160,12 @@ const MovieSearchApp = () => {
 
       if (data.Response === "True" && data.Search) {
         setMovies(data.Search);
+        // Set all categories to the search result
+        const searchResults = {...allMovies};
+        Object.keys(searchResults).forEach(key => {
+          searchResults[key] = data.Search;
+        });
+        setAllMovies(searchResults);
       } else {
         setError(data.Error || "No movies found");
         setMovies([]);
@@ -135,53 +205,67 @@ const MovieSearchApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 p-4 text-white">
-      <div className="max-w-6xl mx-auto">
-        <motion.h1
-          className="text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          CineScope
-        </motion.h1>
+    <>
+      <Header
+        query={query}
+        setQuery={setQuery}
+        searchMovies={searchMovies}
+        filterType={filterType}
+        setFilterType={setFilterType}
+      />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          {/* Search & Filter Components */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <SearchBar
-              query={query}
-              setQuery={setQuery}
-              searchMovies={searchMovies}
-            />
-            <FilterDropdown
-              filterType={filterType}
-              setFilterType={setFilterType}
-            />
-          </div>
-        </motion.div>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900 p-4 text-white pt-28">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            {/* Search & Filter Components */}
+            <div className="flex flex-col md:flex-row gap-4 mb-8 md:hidden">
+              <SearchBar
+                query={query}
+                setQuery={setQuery}
+                searchMovies={searchMovies}
+              />
+              <FilterDropdown
+                filterType={filterType}
+                setFilterType={setFilterType}
+              />
+            </div>
+          </motion.div>
 
-        {/* Error Message */}
-        {error && <ErrorMessage message={error} />}
+          {/* Error Message */}
+          {error && <ErrorMessage message={error} />}
 
-        {/* Loading Indicator */}
-        {loading && <Loader />}
+          {/* Loading Indicator */}
+          {loading && <Loader />}
 
-        {/* Movie List */}
-        {!loading && movies.length > 0 && (
-          <MovieList movies={movies} onMovieClick={fetchMovieDetails} />
-        )}
+          {/* Banner - Only show when filterType is "all" */}
+          {filterType === "all" && (
+            <Banner movies={movies} onMovieClick={fetchMovieDetails} />
+          )}
 
-        {/* Movie Details Modal */}
-        {showDetails && selectedMovie && (
-          <MovieDetails movie={selectedMovie} onClose={closeDetails} />
-        )}
+          {/* Movie Categories - Pass allMovies when filterType is "all" */}
+          {!loading && (
+            filterType === "all" 
+              ? <MovieCategories 
+                  allCategories={allMovies} 
+                  onMovieClick={fetchMovieDetails} 
+                />
+              : <MovieCategories 
+                  movies={movies} 
+                  onMovieClick={fetchMovieDetails} 
+                />
+          )}
+
+          {/* Movie Details Modal */}
+          {showDetails && selectedMovie && (
+            <MovieDetails movie={selectedMovie} onClose={closeDetails} />
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

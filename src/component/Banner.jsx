@@ -180,12 +180,21 @@ function Banner({ movies: propMovies, onMovieClick }) {
             }
           />
         </div>
+        <svg 
+            className={`transition-all duration-500 hidden md:block absolute left-78 inset-y-0 h-full w-24 fill-[#101828] text-gray-100 -ml-12  ${isAnimating ? 
+          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
+          'translate-x-0 opacity-100'}`}
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+          >
+            <polygon points="50,0 100,0 50,100 0,100" />
+          </svg>
         <div className="absolute inset-0 w-full h-full opacity-75 shadow-lg"></div>
 
         <div className={`w-full md:w-3/5 h-full flex items-center rounded-lg transition-all duration-500 ${isAnimating ? 
           (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
           'translate-x-0 opacity-100'}`}>
-          <div className="px-12 md:pr-24 md:pl-16">
+          <div className="px-3 py-4 md:px-12 md:pr-24 md:pl-16">
             <h1 className="text-gray-200 text-3xl mb-3 font-semibold">{currentMovie.Title}</h1>
             <p className="text-gray-400">
               <span className="text-gray-900"></span> {currentMovie.Plot}
@@ -244,13 +253,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
               </button>
             </div>
           </div>
-          <svg
-            className="hidden md:block absolute inset-y-0 h-full w-24 fill-[#101828] text-gray-100 -ml-12"
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <polygon points="50,0 100,0 50,100 0,100" />
-          </svg>
+          
         </div>
         <button
           onClick={prevSlide}

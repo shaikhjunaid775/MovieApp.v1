@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 export const ErrorMessage = ({ message }) => {
   return (
     <motion.div
-      className="bg-red-900 bg-opacity-60 border-l-4 border-red-500 text-white p-4 mb-6 rounded-lg"
+      className="max-w-7xl mx-auto bg-red-900 bg-opacity-60 border-l-4 border-red-500 text-white p-4 mb-6 rounded-lg"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3 }}

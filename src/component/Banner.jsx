@@ -166,7 +166,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
 
   return (
     <>
-      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5 ">
+      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5 pt-16">
         <div className={`aspect-[2/3] overflow-hidden transition-all duration-500 ${isAnimating ? 
           (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
           'translate-x-0 opacity-100'}`}>
@@ -255,7 +255,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
           </div>
           
         </div>
-        <button
+        {/* <button
           onClick={prevSlide}
           className="absolute top-[50%] z-10 bottom-[50%] left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-indigo-600 hover:text-indigo-400 focus:text-indigo-400 -ml-6 focus:outline-none focus:shadow-outline disabled:opacity-50"
           disabled={isAnimating}
@@ -268,7 +268,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
           disabled={isAnimating}
         >
           <span className="block">&#x279c;</span>
-        </button>
+        </button> */}
       </div>
 
       {/* YouTube Trailer Modal */}

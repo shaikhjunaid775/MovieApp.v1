@@ -114,7 +114,8 @@ function Banner({ movies: propMovies, onMovieClick }) {
   // Auto-slide effect
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!showTrailer && !isAnimating) { // Only auto-slide when trailer isn't showing and not animating
+      if (!showTrailer && !isAnimating) {
+        // Only auto-slide when trailer isn't showing and not animating
         nextSlide();
       }
     }, 5000);
@@ -125,7 +126,9 @@ function Banner({ movies: propMovies, onMovieClick }) {
   // Function to get YouTube trailer URL based on movie title and year
   const getTrailerUrl = (movie) => {
     const searchQuery = `${movie.Title} ${movie.Year} official trailer`;
-    return `https://www.youtube.com/embed?search=query&q=${encodeURIComponent(searchQuery)}&autoplay=1`;
+    return `https://www.youtube.com/embed?search=query&q=${encodeURIComponent(
+      searchQuery
+    )}&autoplay=1`;
   };
 
   if (loading) {
@@ -166,13 +169,19 @@ function Banner({ movies: propMovies, onMovieClick }) {
 
   return (
     <>
-      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5 pt-16">
-        <div className={`aspect-[2/3] overflow-hidden transition-all duration-500 ${isAnimating ? 
-          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
-          'translate-x-0 opacity-100'}`}>
+      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5  overflow-hidden">
+        <div
+          className={` md:aspect-[2/3] overflow-hidden transition-all duration-500 ${
+            isAnimating
+              ? direction === "next"
+                ? "translate-x-full opacity-0"
+                : "-translate-x-full opacity-0"
+              : "translate-x-0 opacity-100"
+          }`}
+        >
           <img
             alt={currentMovie.Title}
-            className="w-full h-full object-cover transform transition-transform duration-500 rounded-md"
+            className=" w-full md:h-full object-cover transform transition-transform duration-500 rounded-md"
             src={
               currentMovie.Poster !== "N/A"
                 ? currentMovie.Poster
@@ -180,22 +189,34 @@ function Banner({ movies: propMovies, onMovieClick }) {
             }
           />
         </div>
-        <svg 
-            className={`transition-all duration-500 hidden md:block absolute left-78 inset-y-0 h-full w-24 fill-[#101828] text-gray-100 -ml-12  ${isAnimating ? 
-          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
-          'translate-x-0 opacity-100'}`}
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-          >
-            <polygon points="50,0 100,0 50,100 0,100" />
-          </svg>
+        <svg
+          className={`transition-all duration-500 hidden md:block absolute left-78 inset-y-0 h-full w-24 fill-[#101828] text-gray-100 -ml-12 transition-all duration-500 ${
+            isAnimating
+              ? direction === "next"
+                ? "translate-x-full opacity-0"
+                : "-translate-x-full opacity-0"
+              : "translate-x-0 opacity-100"
+          }`}
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <polygon points="50,0 100,0 50,100 0,100" />
+        </svg>
         <div className="absolute inset-0 w-full h-full opacity-75 shadow-lg"></div>
 
-        <div className={`w-full md:w-3/5 h-full flex items-center rounded-lg transition-all duration-500 ${isAnimating ? 
-          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
-          'translate-x-0 opacity-100'}`}>
+        <div
+          className={`w-full md:w-3/5 h-full flex items-center rounded-lg transition-all duration-500 ${
+            isAnimating
+              ? direction === "next"
+                ? "translate-x-full opacity-0"
+                : "-translate-x-full opacity-0"
+              : "translate-x-0 opacity-100"
+          }`}
+        >
           <div className="px-3 py-4 md:px-12 md:pr-24 md:pl-16">
-            <h1 className="text-gray-200 text-3xl mb-3 font-semibold">{currentMovie.Title}</h1>
+            <h1 className="text-gray-200 text-3xl mb-3 font-semibold">
+              {currentMovie.Title}
+            </h1>
             <p className="text-gray-400">
               <span className="text-gray-900"></span> {currentMovie.Plot}
             </p>
@@ -218,14 +239,15 @@ function Banner({ movies: propMovies, onMovieClick }) {
             </div>
 
             <div className="mt-2 flex flex-wrap gap-2">
-              {currentMovie.Genre && currentMovie.Genre.split(", ").map((genre, index) => (
-                <span
-                  key={index}
-                  className="px-2 py-1 text-xs bg-gray-700 rounded-full text-white"
-                >
-                  {genre}
-                </span>
-              ))}
+              {currentMovie.Genre &&
+                currentMovie.Genre.split(", ").map((genre, index) => (
+                  <span
+                    key={index}
+                    className="px-2 py-1 text-xs bg-gray-700 rounded-full text-white"
+                  >
+                    {genre}
+                  </span>
+                ))}
             </div>
             <div className="mt-3">
               <p className="text-gray-200">
@@ -239,21 +261,23 @@ function Banner({ movies: propMovies, onMovieClick }) {
             </div>
 
             <div className="flex space-x-3 mt-6">
-              <button 
+              <button
                 onClick={() => setShowTrailer(true)}
-                className="shadow-lg px-5 py-2 text-sm tracking-wider text-white uppercase transition-colors duration-300 transform bg-gradient-to-br from-gray-900 to-blue-900 rounded-lg hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+                className="shadow-lg text-sm tracking-wider text-white uppercase px-5 py-2 rounded-lg bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/50 hover:shadow-xl focus:outline-none relative overflow-hidden before:absolute before:inset-0 before:bg-blue-500/30 before:blur-md before:scale-125 before:opacity-0 hover:before:opacity-100 before:transition-opacity"
               >
+                
                 Watch Trailer
               </button>
-              <button 
-                onClick={() => onMovieClick && onMovieClick(currentMovie.imdbID)}
-                className="shadow-lg px-5 py-2 text-sm tracking-wider text-white uppercase transition-colors duration-300 transform bg-gradient-to-bl from-gray-900 to-blue-900 rounded-lg hover:bg-gray-600 focus:outline-none focus:bg-gray-600"
+              <button
+                onClick={() =>
+                  onMovieClick && onMovieClick(currentMovie.imdbID)
+                }
+                className="shadow-lg text-sm tracking-wider text-white uppercase px-5 py-2 rounded-lg bg-gradient-to-br from-gray-900 to-gray-800 border border-gray-700 transition-all duration-300 transform hover:scale-105 hover:shadow-gray-400/50 hover:shadow-xl focus:outline-none ml-2 relative overflow-hidden before:absolute before:inset-0 before:bg-gray-500/30 before:blur-md before:scale-125 before:opacity-0 hover:before:opacity-100 before:transition-opacity"
               >
                 See More
               </button>
             </div>
           </div>
-          
         </div>
         {/* <button
           onClick={prevSlide}

@@ -214,7 +214,7 @@ const MovieSearchApp = () => {
         setFilterType={setFilterType}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900  text-white ">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900  text-white pt-20 px-4">
         <div className="">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

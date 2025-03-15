@@ -6,6 +6,8 @@ function Banner({ movies: propMovies, onMovieClick }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showTrailer, setShowTrailer] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [direction, setDirection] = useState(null);
 
   // Sample movie titles to fetch from OMDB
   const movieTitles = [
@@ -84,25 +86,41 @@ function Banner({ movies: propMovies, onMovieClick }) {
   };
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+    if (isAnimating || movies.length <= 1) return;
+    setIsAnimating(true);
+    setDirection("next");
+    setTimeout(() => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % movies.length);
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 50);
+    }, 500);
   };
 
   const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
-    );
+    if (isAnimating || movies.length <= 1) return;
+    setIsAnimating(true);
+    setDirection("prev");
+    setTimeout(() => {
+      setCurrentIndex(
+        (prevIndex) => (prevIndex - 1 + movies.length) % movies.length
+      );
+      setTimeout(() => {
+        setIsAnimating(false);
+      }, 50);
+    }, 500);
   };
 
   // Auto-slide effect
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!showTrailer) { // Only auto-slide when trailer isn't showing
+      if (!showTrailer && !isAnimating) { // Only auto-slide when trailer isn't showing and not animating
         nextSlide();
       }
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [movies, showTrailer]);
+  }, [movies, showTrailer, isAnimating]);
 
   // Function to get YouTube trailer URL based on movie title and year
   const getTrailerUrl = (movie) => {
@@ -148,11 +166,13 @@ function Banner({ movies: propMovies, onMovieClick }) {
 
   return (
     <>
-      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0  shadow-3xl mb-5">
-        <div className="aspect-[2/3] overflow-hidden">
+      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5 ">
+        <div className={`aspect-[2/3] overflow-hidden transition-all duration-500 ${isAnimating ? 
+          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
+          'translate-x-0 opacity-100'}`}>
           <img
             alt={currentMovie.Title}
-            className="w-full h-full object-cover transform group-hover:scale-110 transition duration-500 rounded-md"
+            className="w-full h-full object-cover transform transition-transform duration-500 rounded-md"
             src={
               currentMovie.Poster !== "N/A"
                 ? currentMovie.Poster
@@ -160,9 +180,11 @@ function Banner({ movies: propMovies, onMovieClick }) {
             }
           />
         </div>
-        <div className="absolute inset-0 w-full h-full opacity-75 shadow-lg"  ></div>
+        <div className="absolute inset-0 w-full h-full opacity-75 shadow-lg"></div>
 
-        <div className="w-full md:w-3/5 h-full flex items-center  rounded-lg">
+        <div className={`w-full md:w-3/5 h-full flex items-center rounded-lg transition-all duration-500 ${isAnimating ? 
+          (direction === 'next' ? 'translate-x-full opacity-0' : '-translate-x-full opacity-0') : 
+          'translate-x-0 opacity-100'}`}>
           <div className="px-12 md:pr-24 md:pl-16">
             <h1 className="text-gray-200 text-3xl mb-3 font-semibold">{currentMovie.Title}</h1>
             <p className="text-gray-400">
@@ -232,13 +254,15 @@ function Banner({ movies: propMovies, onMovieClick }) {
         </div>
         <button
           onClick={prevSlide}
-          className="absolute top-[50%] bottom-[50%] left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-indigo-600 hover:text-indigo-400 focus:text-indigo-400 -ml-6 focus:outline-none focus:shadow-outline"
+          className="absolute top-[50%] z-10 bottom-[50%] left-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-indigo-600 hover:text-indigo-400 focus:text-indigo-400 -ml-6 focus:outline-none focus:shadow-outline disabled:opacity-50"
+          disabled={isAnimating}
         >
           <span className="block" style={{ transform: "rotate(180deg)" }}>&#x279c;</span>
         </button>
         <button
           onClick={nextSlide}
-          className="absolute top-[50%] bottom-[50%] right-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-indigo-600 hover:text-indigo-400 focus:text-indigo-400 -mr-6 focus:outline-none focus:shadow-outline"
+          className="absolute top-[50%] z-10 bottom-[50%] right-0 bg-white rounded-full shadow-md h-12 w-12 text-2xl text-indigo-600 hover:text-indigo-400 focus:text-indigo-400 -mr-6 focus:outline-none focus:shadow-outline disabled:opacity-50"
+          disabled={isAnimating}
         >
           <span className="block">&#x279c;</span>
         </button>

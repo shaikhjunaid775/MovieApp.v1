@@ -31,7 +31,7 @@ const MovieSearchApp = () => {
     all: null, // No specific search term for "all"
     popular: "marvel",
     latest: "movie 2024",
-    top_rated: "star wars",
+    top_rated: "star wars"
   };
 
   // Load movies on initial render and when filter changes
@@ -47,10 +47,10 @@ const MovieSearchApp = () => {
   const fetchAllCategories = async () => {
     setLoading(true);
     setError(null);
-    
-    const categories = ["all","popular", "latest", "top_rated"];
+
+    const categories = ["all", "popular", "latest", "top_rated"];
     const categoryMovies = {};
-    
+
     try {
       // Fetch movies for each category in parallel
       await Promise.all(
@@ -62,28 +62,27 @@ const MovieSearchApp = () => {
             )}&type=movie&apikey=${OMDB_API_KEY}`
           );
           const data = await response.json();
-          
+
           if (data.Response === "True" && data.Search) {
             let sortedResults = [...data.Search];
-            
+
             if (category === "latest") {
               sortedResults.sort((a, b) => parseInt(b.Year) - parseInt(a.Year));
             } else if (category === "top_rated") {
               sortedResults = sortedResults.slice(0, 10);
             }
-            
+
             categoryMovies[category] = sortedResults;
           }
         })
       );
-      
+
       setAllMovies(categoryMovies);
-      
+
       // Set movies to a combined array for the banner display
       const combinedMovies = Object.values(categoryMovies).flat();
       // Take a subset to avoid too many movies in the banner
       setMovies(combinedMovies.slice(0, 10));
-      
     } catch (err) {
       setError("Failed to fetch movies. Please try again.");
     } finally {
@@ -122,7 +121,7 @@ const MovieSearchApp = () => {
 
         setMovies(sortedResults);
         // Update the category in allMovies
-        setAllMovies(prev => ({...prev, [filterType]: sortedResults}));
+        setAllMovies((prev) => ({ ...prev, [filterType]: sortedResults }));
       } else {
         setError(data.Error || "Failed to fetch movies");
         setMovies([]);
@@ -161,8 +160,8 @@ const MovieSearchApp = () => {
       if (data.Response === "True" && data.Search) {
         setMovies(data.Search);
         // Set all categories to the search result
-        const searchResults = {...allMovies};
-        Object.keys(searchResults).forEach(key => {
+        const searchResults = { ...allMovies };
+        Object.keys(searchResults).forEach((key) => {
           searchResults[key] = data.Search;
         });
         setAllMovies(searchResults);
@@ -204,6 +203,21 @@ const MovieSearchApp = () => {
     setShowDetails(false);
   };
 
+
+  const backgroundCircleVariants = {
+    initial: { scale: 0.8, opacity: 0.5 },
+    animate: {
+      scale: [0.8, 1.2, 1],
+      opacity: [0.5, 0.8, 0.6],
+      transition: {
+        repeat: Infinity,
+        repeatType: "reverse",
+        duration: 8,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
     <>
       <Header
@@ -214,7 +228,59 @@ const MovieSearchApp = () => {
         setFilterType={setFilterType}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900  text-white pt-20 px-4">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-blue-900  text-white pt-20 pb- px-4 pb-2">
+        {/* Animated background circles */}
+        <div className="fixed top-0 left-0 w-full h-full overflow-hidden z-0">
+          <motion.div
+            className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            variants={backgroundCircleVariants}
+            initial="initial"
+            animate="animate"
+            custom={0}
+          ></motion.div>
+          <motion.div
+            className="absolute top-1 right-1/4 w-80 h-80 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            variants={backgroundCircleVariants}
+            initial="initial"
+            animate="animate"
+            custom={2}
+            transition={{
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 10,
+              ease: "easeInOut",
+              delay: 1
+            }}
+          ></motion.div>
+          <motion.div
+            className="absolute bottom-1/4 right-1/3 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            variants={backgroundCircleVariants}
+            initial="initial"
+            animate="animate"
+            custom={1}
+            transition={{
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 12,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          ></motion.div>
+          <motion.div
+            className="absolute bottom-3 right-3 w-72 h-72 bg-blue-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            variants={backgroundCircleVariants}
+            initial="initial"
+            animate="animate"
+            custom={1}
+            transition={{
+              repeat: Infinity,
+              repeatType: "reverse",
+              duration: 12,
+              ease: "easeInOut",
+              delay: 2
+            }}
+          ></motion.div>
+        </div>
         <div className="">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -247,17 +313,18 @@ const MovieSearchApp = () => {
           )}
 
           {/* Movie Categories - Pass allMovies when filterType is "all" */}
-          {!loading && (
-            filterType === "all" 
-              ? <MovieCategories 
-                  allCategories={allMovies} 
-                  onMovieClick={fetchMovieDetails} 
-                />
-              : <MovieCategories 
-                  movies={movies} 
-                  onMovieClick={fetchMovieDetails} 
-                />
-          )}
+          {!loading &&
+            (filterType === "all" ? (
+              <MovieCategories
+                allCategories={allMovies}
+                onMovieClick={fetchMovieDetails}
+              />
+            ) : (
+              <MovieCategories
+                movies={movies}
+                onMovieClick={fetchMovieDetails}
+              />
+            ))}
 
           {/* Movie Details Modal */}
           {showDetails && selectedMovie && (

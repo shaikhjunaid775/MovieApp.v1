@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Tilt from 'react-parallax-tilt';
 
 export const MovieItem = ({ movie, onClick, index }) => {
   const item = {
@@ -8,9 +9,9 @@ export const MovieItem = ({ movie, onClick, index }) => {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5,
-      },
-    },
+        duration: 0.5
+      }
+    }
   };
 
   return (
@@ -19,23 +20,25 @@ export const MovieItem = ({ movie, onClick, index }) => {
       variants={item}
       whileHover={{
         scale: 1.05,
-        transition: { duration: 0.2 },
+        transition: { duration: 0.2 }
       }}
       onClick={onClick}
     >
-      <div className="aspect-[2/3] overflow-hidden rounded-xl">
-        {movie.Poster && movie.Poster !== "N/A" ? (
-          <img
-            src={movie.Poster}
-            alt={movie.Title}
-            className="w-full h-full object-cover transform group-hover:scale-110 transition duration-500"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-800">
-            <span className="text-gray-300">No Poster Available</span>
-          </div>
-        )}
-      </div>
+      <Tilt>
+        <div className="aspect-[2/3] overflow-hidden rounded-xl">
+          {movie.Poster && movie.Poster !== "N/A" ? (
+            <img
+              src={movie.Poster}
+              alt={movie.Title}
+              className="w-full h-full object-cover transform group-hover:scale-110 transition duration-500"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-800">
+              <span className="text-gray-300">No Poster Available</span>
+            </div>
+          )}
+        </div>
+      </Tilt>
 
       <div className="  p-1 ">
         <h2 className="text-lg font-semibold text-white truncate leading-none">

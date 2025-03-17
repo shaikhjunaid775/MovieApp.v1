@@ -5,6 +5,7 @@
     height: 0.2em;
     border-radius: 9999px;
 }
+
 ::-webkit-scrollbar-track-piece {
     background: #888;
     border-radius: 9999px;

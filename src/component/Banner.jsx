@@ -15,7 +15,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
     "Avengers: Endgame",
     "Black Panther",
     "Thor: Ragnarok",
-    "Spider-Man: No Way Home",
+    "Spider-Man: No Way Home"
   ];
 
   // Replace this with your own API key from OMDB (http://www.omdbapi.com/)
@@ -169,7 +169,7 @@ function Banner({ movies: propMovies, onMovieClick }) {
 
   return (
     <>
-      <div className="relative rounded-lg block md:flex items-center bg-gray-900 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5  overflow-hidden">
+      <div className="relative rounded-lg block md:flex items-center bg-gray-900 bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-0 shadow-3xl mb-5  overflow-hidden">
         <div
           className={` md:aspect-[2/3] overflow-hidden transition-all duration-500 ${
             isAnimating
@@ -265,7 +265,6 @@ function Banner({ movies: propMovies, onMovieClick }) {
                 onClick={() => setShowTrailer(true)}
                 className="shadow-lg text-sm tracking-wider text-white uppercase px-5 py-2 rounded-lg bg-gradient-to-br from-blue-900 to-blue-800 border border-blue-700 transition-all duration-300 transform hover:scale-105 hover:shadow-blue-500/50 hover:shadow-xl focus:outline-none relative overflow-hidden before:absolute before:inset-0 before:bg-blue-500/30 before:blur-md before:scale-125 before:opacity-0 hover:before:opacity-100 before:transition-opacity"
               >
-                
                 Watch Trailer
               </button>
               <button

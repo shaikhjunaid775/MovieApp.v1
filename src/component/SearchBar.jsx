@@ -9,18 +9,18 @@ export const SearchBar = ({ query, setQuery, searchMovies }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for movies..."
-          className="w-full p-4 pr-12 rounded-3xl bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-30 text-black placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 transition duration-300"
+          className="w-full p-2 pr-12 rounded-3xl bg-white bg-opacity-10 backdrop-blur-sm border border-white border-opacity-30 text-black placeholder-gray-600 focus:outline-none focus:ring-2  transition duration-300"
         />
         <button
           type="submit"
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500 to-blue-500 text-white p-2 rounded-full hover:from-purple-600 hover:to-blue-600 transition duration-300"
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white p-2 rounded-full hover:to-blue-600 transition duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke="#000"
           >
             <path
               strokeLinecap="round"

@@ -4,18 +4,18 @@ import { motion } from "framer-motion";
 export const MovieDetails = ({ movie, onClose }) => {
   return (
     <motion.div
-      className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-black/20 bg-opacity-80 backdrop-blur-xs flex items-center justify-center p-4 z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-5xl w-full max-h-screen overflow-y-auto"
+        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl max-w-5xl w-full max-h-screen overflow-y-auto "
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", duration: 0.5 }}
       >
-        <div className="relative p-6 md:p-8">
+        <div className="relative p-6 md:p-8 ">
           <button
             onClick={onClose}
             className="absolute right-4 top-4 bg-black bg-opacity-50 hover:bg-opacity-70 text-white p-2 rounded-full z-20 transition duration-300"
